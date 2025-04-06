@@ -3,6 +3,7 @@
 namespace App\Http\Services\Handlers\PhoneBook;
 
 use App\Http\Services\Handlers\Handler;
+use Symfony\Component\HttpFoundation\Response;
 
 class NotSharedHandler extends Handler
 {
@@ -19,7 +20,7 @@ class NotSharedHandler extends Handler
 
         if (!$sharedRecord) {
             $context['message'] = 'This phone book is not shared with the specified use';
-            $context['statusCode'] = 404;
+            $context['statusCode'] = Response::HTTP_NOT_FOUND;
             return parent::handle($context);
         }
 

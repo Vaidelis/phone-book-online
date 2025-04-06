@@ -12,22 +12,24 @@ use Illuminate\Support\Facades\Log;
 
 class PhoneBookDeleteHandler
 {
+    public function __construct(
+        private readonly FindPhoneBookHandler $findPhoneBookHandler,
+        private readonly DeleteSharedPhoneBookHandler $deleteSharedPhoneBookHandler,
+        private readonly DeletePhoneBookHandler $deletePhoneBookHandler,
+        private readonly FinalResponseHandler $finalResponseHandler
+    ) {
+        $this->findPhoneBookHandler
+            ->setNext($this->deleteSharedPhoneBookHandler)
+            ->setNext($this->deletePhoneBookHandler)
+            ->setNext($this->finalResponseHandler);
+    }
+
     public function delete(int $id): array
     {
         try {
             DB::beginTransaction();
 
-            $findPhoneBookHandler = new FindPhoneBookHandler();
-            $deleteSharedPhoneBookHandler = new DeleteSharedPhoneBookHandler();
-            $deletePhoneBookHandler = new DeletePhoneBookHandler();
-            $finalResponseHandler = new FinalResponseHandler();
-
-            $findPhoneBookHandler
-                ->setNext($deleteSharedPhoneBookHandler)
-                ->setNext($deletePhoneBookHandler)
-                ->setNext($finalResponseHandler);
-
-            $result = $findPhoneBookHandler->handle(['id' => $id]);
+            $result = $this->findPhoneBookHandler->handle(['id' => $id]);
 
             if (isset($result['success']) && $result['success']) {
                 DB::commit();

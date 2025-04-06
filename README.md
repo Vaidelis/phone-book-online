@@ -18,6 +18,7 @@ docker exec -it laravel-vue-app bash
 Once inside the container, run:
 
 ```bash
+composer install
 php artisan key:generate
 php artisan migrate
 ```

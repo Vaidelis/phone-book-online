@@ -8,28 +8,32 @@ use App\Http\Services\Handlers\FinalResponseHandler;
 use App\Http\Services\Handlers\PhoneBook\FindPhoneBookHandler;
 use App\Http\Services\Handlers\PhoneBook\NotSharedHandler;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class SharedPhoneBookUnshareHandler
 {
+    public function __construct(
+        private readonly FindPhoneBookHandler $findPhoneBookHandler,
+        private readonly NotSharedHandler $notSharedHandler,
+        private readonly UnsharePhoneBookHandler $unsharePhoneBookHandler,
+        private readonly FinalResponseHandler $finalResponseHandler
+    )
+    {
+        $this->findPhoneBookHandler
+            ->setNext($this->notSharedHandler)
+            ->setNext($this->unsharePhoneBookHandler)
+            ->setNext($this->finalResponseHandler);
+    }
+
     public function unshare(int $id, array $validated): array
     {
         try {
-            $findPhoneBookHandler = new FindPhoneBookHandler();
-            $notSharedHandler = new NotSharedHandler();
-            $unsharePhoneBookHandler = new UnsharePhoneBookHandler();
-            $finalResponseHandler = new FinalResponseHandler();
-
-            $findPhoneBookHandler
-                ->setNext($notSharedHandler)
-                ->setNext($unsharePhoneBookHandler)
-                ->setNext($finalResponseHandler);
-
             $context = [
                 'id' => $id,
                 'validated' => $validated
             ];
 
-            return $findPhoneBookHandler->handle($context);
+            return $this->findPhoneBookHandler->handle($context);
         } catch (\Exception $e) {
             Log::error('Phone book unsharing failed', [
                 'id' => $id,
@@ -40,7 +44,7 @@ class SharedPhoneBookUnshareHandler
             return [
                 'success' => false,
                 'message' => 'Failed to unshare phone book: ' . $e->getMessage(),
-                'statusCode' => 500
+                'statusCode' => Response::HTTP_INTERNAL_SERVER_ERROR,
             ];
         }
     }

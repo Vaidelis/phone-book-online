@@ -4,6 +4,7 @@ namespace App\Http\Services\Handlers\PhoneBook;
 
 use App\Http\Services\Handlers\Handler;
 use App\Models\PhoneBook;
+use Symfony\Component\HttpFoundation\Response;
 
 class FindPhoneBookHandler extends Handler
 {
@@ -15,7 +16,7 @@ class FindPhoneBookHandler extends Handler
             return [
                 'success' => false,
                 'message' => 'Phone book not found',
-                'statusCode' => 404
+                'statusCode' => Response::HTTP_NOT_FOUND
             ];
         }
 

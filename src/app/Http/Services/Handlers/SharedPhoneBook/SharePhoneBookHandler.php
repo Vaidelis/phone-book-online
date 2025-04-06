@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Services\Handlers\Handler;
 
 class SharePhoneBookHandler extends Handler
@@ -18,7 +19,7 @@ class SharePhoneBookHandler extends Handler
         ]);
 
         $context['message'] = 'Phone book shared successfully';
-        $context['statusCode'] = 200;
+        $context['statusCode'] = Response::HTTP_OK;
 
         return parent::handle($context);
     }

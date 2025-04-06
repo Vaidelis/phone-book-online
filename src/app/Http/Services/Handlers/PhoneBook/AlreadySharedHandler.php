@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Services\Handlers\PhoneBook;
 
 use App\Http\Services\Handlers\Handler;
+use Symfony\Component\HttpFoundation\Response;
 
 class AlreadySharedHandler extends Handler
 {
@@ -19,7 +20,7 @@ class AlreadySharedHandler extends Handler
 
         if ($alreadyShared) {
             $context['message'] = 'Phone book is already shared with this user';
-            $context['statusCode'] = 200;
+            $context['statusCode'] = Response::HTTP_OK;
             return parent::handle($context);
         }
 

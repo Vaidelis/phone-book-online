@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
 use App\Http\Services\Handlers\Handler;
+use Symfony\Component\HttpFoundation\Response;
 
 class UnsharePhoneBookHandler extends Handler
 {
@@ -14,7 +15,7 @@ class UnsharePhoneBookHandler extends Handler
         $sharedRecord->delete();
 
         $context['message'] = 'Phone book unshared successfully';
-        $context['statusCode'] = 200;
+        $context['statusCode'] = Response::HTTP_OK;
 
         return parent::handle($context);
     }
