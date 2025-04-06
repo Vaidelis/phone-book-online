@@ -37,7 +37,7 @@ class PhoneBookController extends Controller
         $validated = $request->validated();
         $phoneBook = PhoneBook::create($validated);
 
-        return response()->json([
+        return new JsonResponse([
             'success' => true,
             'message' => 'Contact created successfully',
             'data' => $phoneBook
@@ -68,7 +68,7 @@ class PhoneBookController extends Controller
         $validated = $request->validated();
         $phoneBook->update($validated);
 
-        return response()->json([
+        return new JsonResponse([
             'success' => true,
             'message' => 'Contact updated successfully',
             'data' => $phoneBook
@@ -87,7 +87,7 @@ class PhoneBookController extends Controller
     {
         $result = $this->phoneBookDeleteHandler->delete($id);
 
-        return response()->json([
+        return new JsonResponse([
             'success' => $result['success'],
             'message' => $result['message']
         ], $result['statusCode']);
