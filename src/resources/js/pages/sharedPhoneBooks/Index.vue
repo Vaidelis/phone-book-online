@@ -57,8 +57,10 @@ const unsubscribe = async (phoneBookId: number) => {
     try {
         isProcessing.value.add(phoneBookId);
 
-        const response = await axios.post(route('shared-phone-books.unshare', phoneBookId), {
-            shared_user_id: user.id
+        const response = await axios.delete(route('shared-phone-books.unshare', phoneBookId), {
+            data: {
+                shared_user_id: user.id
+            }
         });
 
         if (response.status !== 200) {

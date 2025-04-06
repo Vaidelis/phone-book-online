@@ -32,13 +32,19 @@ const toggleSharing = async (userId: number) => {
         isProcessing.value = true;
 
         const isCurrentlyShared = isSharedWithUser(userId);
-        const endpoint = isCurrentlyShared
-            ? route('shared-phone-books.unshare', phoneBookId)
-            : route('shared-phone-books.share', phoneBookId);
+        let response;
 
-        const response = await axios.post(endpoint, {
-            shared_user_id: userId
-        });
+        if (isCurrentlyShared) {
+            response = await axios.delete(route('shared-phone-books.unshare', phoneBookId), {
+                data: {
+                    shared_user_id: userId
+                }
+            });
+        } else {
+            response = await axios.post(route('shared-phone-books.share', phoneBookId), {
+                shared_user_id: userId
+            });
+        }
 
         if (response.status !== 200) {
             toast({
