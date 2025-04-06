@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
-use App\Models\PhoneBook;
+use App\Http\Services\Handlers\FinalResponseHandler;
+use App\Http\Services\Handlers\PhoneBook\AlreadySharedHandler;
+use App\Http\Services\Handlers\PhoneBook\FindPhoneBookHandler;
 use Illuminate\Support\Facades\Log;
 
 class SharedPhoneBookShareHandler
@@ -12,36 +14,22 @@ class SharedPhoneBookShareHandler
     public function share(int $id, array $validated): array
     {
         try {
-            $phoneBook = PhoneBook::find($id);
-            if (!$phoneBook) {
-                return [
-                    'success' => false,
-                    'message' => 'Phone book not found',
-                    'statusCode' => 404
-                ];
-            }
+            $findPhoneBookHandler = new FindPhoneBookHandler();
+            $alreadySharedHandler = new AlreadySharedHandler();
+            $sharePhoneBookHandler = new SharePhoneBookHandler();
+            $finalResponseHandler = new FinalResponseHandler();
 
-            $alreadyShared = $phoneBook->sharedPhoneBooks()
-                ->where('shared_user_id', $validated['shared_user_id'])
-                ->exists();
+            $findPhoneBookHandler
+                ->setNext($alreadySharedHandler)
+                ->setNext($sharePhoneBookHandler)
+                ->setNext($finalResponseHandler);
 
-            if ($alreadyShared) {
-                return [
-                    'success' => true,
-                    'message' => 'Phone book is already shared with this user',
-                    'statusCode' => 200
-                ];
-            }
-
-            $phoneBook->sharedPhoneBooks()->create([
-                'shared_user_id' => $validated['shared_user_id']
-            ]);
-
-            return [
-                'success' => true,
-                'message' => 'Phone book shared successfully',
-                'statusCode' => 200
+            $context = [
+                'id' => $id,
+                'validated' => $validated
             ];
+
+            return $findPhoneBookHandler->handle($context);
         } catch (\Exception $e) {
             Log::error('Phone book sharing failed', [
                 'id' => $id,

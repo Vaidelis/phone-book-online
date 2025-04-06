@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
-use App\Models\PhoneBook;
+use App\Http\Services\Handlers\FinalResponseHandler;
+use App\Http\Services\Handlers\PhoneBook\FindPhoneBookHandler;
+use App\Http\Services\Handlers\PhoneBook\NotSharedHandler;
 use Illuminate\Support\Facades\Log;
 
 class SharedPhoneBookUnshareHandler
@@ -12,34 +14,22 @@ class SharedPhoneBookUnshareHandler
     public function unshare(int $id, array $validated): array
     {
         try {
-            $phoneBook = PhoneBook::find($id);
-            if (!$phoneBook) {
-                return [
-                    'success' => false,
-                    'message' => 'Phone book not found',
-                    'statusCode' => 404
-                ];
-            }
+            $findPhoneBookHandler = new FindPhoneBookHandler();
+            $notSharedHandler = new NotSharedHandler();
+            $unsharePhoneBookHandler = new UnsharePhoneBookHandler();
+            $finalResponseHandler = new FinalResponseHandler();
 
-            $sharedRecord = $phoneBook->sharedPhoneBooks()
-                ->where('shared_user_id', $validated['shared_user_id'])
-                ->first();
+            $findPhoneBookHandler
+                ->setNext($notSharedHandler)
+                ->setNext($unsharePhoneBookHandler)
+                ->setNext($finalResponseHandler);
 
-            if (!$sharedRecord) {
-                return [
-                    'success' => false,
-                    'message' => 'This phone book is not shared with the specified user',
-                    'statusCode' => 404
-                ];
-            }
-
-            $sharedRecord->delete();
-
-            return [
-                'success' => true,
-                'message' => 'Phone book unshared successfully',
-                'statusCode' => 200
+            $context = [
+                'id' => $id,
+                'validated' => $validated
             ];
+
+            return $findPhoneBookHandler->handle($context);
         } catch (\Exception $e) {
             Log::error('Phone book unsharing failed', [
                 'id' => $id,
