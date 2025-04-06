@@ -22,12 +22,13 @@ php artisan key:generate
 php artisan migrate
 ```
 
-## 🌐 Web Access
+## 🌐 Web and phpMyAdmin Access
 
 Open your browser and go to:
 
 ```
-http://localhost:8081/
+http://localhost:8081/ - web
+http://localhost:8082/ - phpMyAdmin
 ```
 
 ## 📚 API Documentation
