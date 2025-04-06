@@ -2,6 +2,8 @@
 
 ### Build and Start the Containers
 
+copy .env.example file and name it .env
+
 ```bash
 docker-compose build
 docker-compose up -d
@@ -18,7 +20,6 @@ docker exec -it laravel-vue-app bash
 Once inside the container, run:
 
 ```bash
-composer install
 php artisan key:generate
 php artisan migrate
 ```
