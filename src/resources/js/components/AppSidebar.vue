@@ -14,17 +14,27 @@ const mainNavItems: NavItem[] = [
         href: '/dashboard',
         icon: LayoutGrid,
     },
+    {
+        title: 'Phone Books',
+        href: '/phone-books',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Shared Phone Books',
+        href: '/shared-phone-books',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        href: 'https://github.com/Vaidelis/phone-book-online',
         icon: Folder,
     },
     {
         title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
+        href: 'http://localhost:8081/docs',
         icon: BookOpen,
     },
 ];

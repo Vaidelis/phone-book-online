@@ -149,6 +149,14 @@
       <path value="$PROJECT_DIR$/src/vendor/laravel/prompts" />
       <path value="$PROJECT_DIR$/src/vendor/sebastian/environment" />
       <path value="$PROJECT_DIR$/src/vendor/composer" />
+      <path value="$PROJECT_DIR$/src/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/src/vendor/mpociot/reflection-docblock" />
+      <path value="$PROJECT_DIR$/src/vendor/shalvah/clara" />
+      <path value="$PROJECT_DIR$/src/vendor/erusev/parsedown" />
+      <path value="$PROJECT_DIR$/src/vendor/shalvah/upgrader" />
+      <path value="$PROJECT_DIR$/src/vendor/knuckleswtf/scribe" />
+      <path value="$PROJECT_DIR$/src/vendor/spatie/data-transfer-object" />
+      <path value="$PROJECT_DIR$/src/vendor/symfony/var-exporter" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
