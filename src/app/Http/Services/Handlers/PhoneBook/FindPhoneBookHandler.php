@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Services\Handlers\PhoneBook;
 
 use App\Http\Services\Handlers\Handler;

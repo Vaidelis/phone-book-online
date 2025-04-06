@@ -17,8 +17,7 @@ class SharedPhoneBookUnshareHandler
         private readonly NotSharedHandler $notSharedHandler,
         private readonly UnsharePhoneBookHandler $unsharePhoneBookHandler,
         private readonly FinalResponseHandler $finalResponseHandler
-    )
-    {
+    ) {
         $this->findPhoneBookHandler
             ->setNext($this->notSharedHandler)
             ->setNext($this->unsharePhoneBookHandler)
