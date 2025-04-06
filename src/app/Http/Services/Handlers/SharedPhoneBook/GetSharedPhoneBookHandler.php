@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
-use App\Models\PhoneBook;
 use App\Models\SharedPhoneBook;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -14,13 +13,11 @@ class GetSharedPhoneBookHandler
     public function handle(): Collection
     {
         try {
-            $sharedPhoneBookIds = SharedPhoneBook::where('shared_user_id', auth()->id())
-                ->pluck('phone_book_id');
-
-            return PhoneBook::with('user')
-                ->whereIn('id', $sharedPhoneBookIds)
+            return SharedPhoneBook::where('shared_user_id', auth()->id())
+                ->with(['phoneBook.user'])
                 ->get()
-                ->map(function ($phoneBook) {
+                ->map(function ($sharedPhoneBook) {
+                    $phoneBook = $sharedPhoneBook->phoneBook;
                     return [
                         'id' => $phoneBook->id,
                         'name' => $phoneBook->name,

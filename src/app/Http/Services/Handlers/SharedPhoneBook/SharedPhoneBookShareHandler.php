@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
 use App\Models\PhoneBook;
-use App\Models\SharedPhoneBook;
 use Illuminate\Support\Facades\Log;
 
 class SharedPhoneBookShareHandler
@@ -20,7 +21,7 @@ class SharedPhoneBookShareHandler
                 ];
             }
 
-            $alreadyShared = SharedPhoneBook::where('phone_book_id', $id)
+            $alreadyShared = $phoneBook->sharedPhoneBooks()
                 ->where('shared_user_id', $validated['shared_user_id'])
                 ->exists();
 
@@ -32,8 +33,7 @@ class SharedPhoneBookShareHandler
                 ];
             }
 
-            SharedPhoneBook::create([
-                'phone_book_id' => $id,
+            $phoneBook->sharedPhoneBooks()->create([
                 'shared_user_id' => $validated['shared_user_id']
             ]);
 

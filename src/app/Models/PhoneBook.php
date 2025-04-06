@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PhoneBook extends Model
 {
-    public const TABLE_NAME = 'phone_book';
     protected $table = 'phone_book';
     protected $fillable = [
         'name',

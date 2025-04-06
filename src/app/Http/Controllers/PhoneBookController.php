@@ -17,7 +17,7 @@ class PhoneBookController extends Controller
 
     public function index(): Response
     {
-        $phoneBooks = PhoneBook::where('user_id', auth()->id())->get();
+        $phoneBooks = PhoneBook::where('user_id', auth()->id())->with('sharedPhoneBooks')->get();
         $users = User::where('id', '!=', auth()->id())->get();
         $phoneBookSharing = $this->phoneBookSharingHandler->handle($phoneBooks);
 

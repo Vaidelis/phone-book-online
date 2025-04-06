@@ -8,10 +8,6 @@ abstract class AbstractSharedPhoneBookRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        /*$phoneBookId = $this->route('id');
-        $phoneBook = PhoneBook::findOrFail($phoneBookId);
-
-        return $phoneBook->user_id === auth()->id();*/
         return true;
     }
 

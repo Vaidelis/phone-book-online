@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Services\Handlers\SharedPhoneBook;
 
 use App\Models\PhoneBook;
-use App\Models\SharedPhoneBook;
 use Illuminate\Support\Facades\Log;
 
 class SharedPhoneBookUnshareHandler
@@ -20,7 +21,7 @@ class SharedPhoneBookUnshareHandler
                 ];
             }
 
-            $sharedRecord = SharedPhoneBook::where('phone_book_id', $id)
+            $sharedRecord = $phoneBook->sharedPhoneBooks()
                 ->where('shared_user_id', $validated['shared_user_id'])
                 ->first();
 

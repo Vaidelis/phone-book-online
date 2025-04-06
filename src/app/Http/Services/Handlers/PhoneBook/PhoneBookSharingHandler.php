@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Services\Handlers\PhoneBook;
 
-use App\Models\SharedPhoneBook;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +15,7 @@ class PhoneBookSharingHandler
             $phoneBookSharing = [];
 
             foreach ($phoneBooks as $phoneBook) {
-                $phoneBookSharing[$phoneBook->id] = SharedPhoneBook::where('phone_book_id', $phoneBook->id)
+                $phoneBookSharing[$phoneBook->id] = $phoneBook->sharedPhoneBooks()
                     ->pluck('shared_user_id')
                     ->toArray();
             }

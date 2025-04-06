@@ -20,9 +20,9 @@ class GetDashboardStatsHandler
             }
 
             $totalPhoneBooks = PhoneBook::where('user_id', $userId)->count();
-            $sharedByUser = SharedPhoneBook::whereIn('phone_book_id', static function($query) use ($userId) {
-                $query->select('id')->from(PhoneBook::TABLE_NAME)->where('user_id', $userId);
-            })->distinct('phone_book_id')->count();
+            $sharedByUser = PhoneBook::where('user_id', $userId)
+                ->whereHas('sharedPhoneBooks')
+                ->count();
             $sharedWithUser = SharedPhoneBook::where('shared_user_id', $userId)->count();
 
             return [
