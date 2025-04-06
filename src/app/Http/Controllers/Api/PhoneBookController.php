@@ -44,6 +44,24 @@ class PhoneBookController extends Controller
         ]);
     }
 
+    /**
+     * Update an existing phone book entry
+     *
+     * @bodyParam name string required The name of the contact. Example: John Doe
+     * @bodyParam phone_number string required The phone number of the contact. Example: +1234567890
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Contact updated successfully",
+     *  "data": {
+     *      "id": 1,
+     *      "name": "John Doe",
+     *      "phone_number": "+1234567890",
+     *      "created_at": "2023-01-01T00:00:00.000000Z",
+     *      "updated_at": "2023-01-01T00:00:00.000000Z"
+     *  }
+     * }
+     */
     public function update(PhoneBookUpdateRequest $request, int $id): JsonResponse
     {
         $phoneBook = PhoneBook::findOrFail($id);
@@ -57,6 +75,14 @@ class PhoneBookController extends Controller
         ]);
     }
 
+    /**
+     * Delete a phone book entry
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Contact deleted successfully"
+     * }
+     */
     public function delete(int $id): JsonResponse
     {
         $result = $this->phoneBookDeleteHandler->delete($id);

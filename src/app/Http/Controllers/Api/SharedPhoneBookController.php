@@ -18,6 +18,16 @@ class SharedPhoneBookController
     ) {
     }
 
+    /**
+     * Share a phone book entry
+     *
+     * @bodyParam user_id int required The ID of the user to share the contact with. Example: 1
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Contact shared successfully"
+     * }
+     */
     public function share(SharedPhoneBookShareRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
@@ -29,6 +39,16 @@ class SharedPhoneBookController
         ], $result['statusCode']);
     }
 
+    /**
+     * Unshare a phone book entry
+     *
+     * @bodyParam user_id int required The ID of the user to unshare the contact with. Example: 1
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Contact unshared successfully"
+     * }
+     */
     public function unshare(SharedPhoneBookUnshareRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
