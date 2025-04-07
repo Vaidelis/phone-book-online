@@ -33,7 +33,7 @@ class SharedPhoneBookController
         $validated = $request->validated();
         $result = $this->sharedPhoneBookShareHandler->share($id, $validated);
 
-        return response()->json([
+        return new JsonResponse([
             'success' => $result['success'],
             'message' => $result['message']
         ], $result['statusCode']);
@@ -54,7 +54,7 @@ class SharedPhoneBookController
         $validated = $request->validated();
         $result = $this->sharedPhoneBookUnshareHandler->unshare($id, $validated);
 
-        return response()->json([
+        return new JsonResponse([
             'success' => $result['success'],
             'message' => $result['message']
         ], $result['statusCode']);

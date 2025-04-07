@@ -16,18 +16,18 @@ class TokenController extends Controller
         $credentials = $request->validated();
 
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return new JsonResponse(['message' => 'Invalid credentials'], 401);
         }
 
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 403);
+            return new JsonResponse(['message' => 'User not found'], 403);
         }
 
         $token = $user->createToken('api-token');
 
-        return response()->json([
+        return new JsonResponse([
             'token' => $token->plainTextToken
         ]);
     }

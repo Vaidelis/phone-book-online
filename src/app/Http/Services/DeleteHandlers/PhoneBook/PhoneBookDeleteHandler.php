@@ -4,42 +4,44 @@ declare(strict_types=1);
 
 namespace App\Http\Services\DeleteHandlers\PhoneBook;
 
-use App\Models\PhoneBook;
-use App\Models\SharedPhoneBook;
+use App\Http\Services\DeleteHandlers\SharedPhoneBook\DeleteSharedPhoneBookHandler;
+use App\Http\Services\Handlers\FinalResponseHandler;
+use App\Http\Services\Handlers\PhoneBook\FindPhoneBookHandler;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PhoneBookDeleteHandler
 {
+    public function __construct(
+        private readonly FindPhoneBookHandler $findPhoneBookHandler,
+        private readonly DeleteSharedPhoneBookHandler $deleteSharedPhoneBookHandler,
+        private readonly DeletePhoneBookHandler $deletePhoneBookHandler,
+        private readonly FinalResponseHandler $finalResponseHandler
+    ) {
+        $this->findPhoneBookHandler
+            ->setNext($this->deleteSharedPhoneBookHandler)
+            ->setNext($this->deletePhoneBookHandler)
+            ->setNext($this->finalResponseHandler);
+    }
+
     public function delete(int $id): array
     {
         try {
-            $phoneBook = PhoneBook::find($id);
-
-            if (!$phoneBook) {
-                return [
-                    'success' => false,
-                    'message' => 'Phone book not found',
-                    'statusCode' => 404
-                ];
-            }
-
             DB::beginTransaction();
-            try {
-                SharedPhoneBook::where('phone_book_id', $id)->delete();
-                $phoneBook->delete();
+
+            $result = $this->findPhoneBookHandler->handle(['id' => $id]);
+
+            if (isset($result['success']) && $result['success']) {
                 DB::commit();
-            } catch (\Exception $e) {
+            } else {
                 DB::rollBack();
-                throw $e;
             }
 
-            return [
-                'success' => true,
-                'message' => 'Phone book deleted successfully',
-                'statusCode' => 200
-            ];
+            return $result;
+
         } catch (\Exception $e) {
+            DB::rollBack();
+
             Log::error('Phone book deletion failed', [
                 'id' => $id,
                 'error' => $e->getMessage(),
@@ -54,3 +56,4 @@ class PhoneBookDeleteHandler
         }
     }
 }
+
