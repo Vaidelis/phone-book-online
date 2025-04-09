@@ -34,14 +34,3 @@ WORKDIR /var/www/html
 # Fix permissions to prevent errors during install
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html
-
-# Use a non-root user to prevent permission issues
-USER www-data
-
-# Optional: Set environment variables for Composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
-# To allow for cache clearing and easy install of composer dependencies
-RUN composer install --no-scripts --prefer-dist && \
-    composer dump-autoload --optimize
-

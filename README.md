@@ -20,6 +20,9 @@ docker exec -it laravel-vue-app bash
 Once inside the container, run:
 
 ```bash
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+composer install --no-scripts --prefer-dist
+composer dump-autoload --optimize
 php artisan key:generate
 php artisan migrate
 ```
